@@ -28,10 +28,11 @@ int main()
         return -1;
     }
 
-    bpx::Image bpx_surface(
-        sdl_surface->pixels, sdl_surface->w, sdl_surface->h,
-        bpx::PixelFormat::BGRA_U8, false, false
-    );
+    bpx::Image bpx_surface = {
+        sdl_surface->pixels,
+        sdl_surface->w, sdl_surface->h,
+        bpx::PixelFormat::BGRA_U8, false
+    };
 
     bpx::Image image = bpx::Image(bpx::BLACK, 128, 128);
     bpx::circle_gradient(image, 64, 64, 64, bpx::GREEN, bpx::BLANK);
