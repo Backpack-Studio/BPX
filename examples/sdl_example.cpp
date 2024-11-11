@@ -34,7 +34,7 @@ int main()
         bpx::PixelFormat::BGRA_U8, false
     };
 
-    bpx::Image image = bpx::Image(bpx::BLACK, 128, 128);
+    bpx::Image image = bpx::Image(128, 128); // create a 128x128 blank RGBA_U8 image
     bpx::circle_gradient(image, 64, 64, 64, bpx::GREEN, bpx::BLANK);
 
     bool running = true;

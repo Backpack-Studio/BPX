@@ -75,12 +75,12 @@ public:
      * initialized to a single color. Useful for creating placeholders, backgrounds, or
      * testing purposes.
      *
-     * @param color The color to set for all pixels.
      * @param w The width of the image in pixels.
      * @param h The height of the image in pixels.
+     * @param color The color to set for all pixels. Default is BLANK.
      * @param format The pixel format for the image. Default is RGBA_U8.
      */
-    explicit Image(Color color, int w, int h, PixelFormat format = PixelFormat::RGBA_U8);
+    explicit Image(int w, int h, Color color = BLANK, PixelFormat format = PixelFormat::RGBA_U8);
 
     /**
      * @brief Constructs an image from an external pixel data source (makes a copy).

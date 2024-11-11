@@ -138,7 +138,7 @@ Image::Image(const std::string& filePath, bool flip_vertically)
     m_pixels = data;
 }
 
-Image::Image(Color color, int w, int h, PixelFormat format)
+Image::Image(int w, int h, Color color, PixelFormat format)
     : m_w(w), m_h(h), m_format(format), m_owned(true)
 {
     size_t size = w * h;

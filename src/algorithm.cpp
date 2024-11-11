@@ -825,10 +825,10 @@ Image& rotate_90(Image& image)
                 new_data[dst_offset] = color;
             }
         }
-        image = Image(
+        image = {
             new_data, image.height(), image.width(),
             image.format(), true
-        );
+        };
     }
 
     return image;
@@ -856,7 +856,7 @@ Image copy(const Image& image)
 
 Image convert(const Image& image, PixelFormat new_format)
 {
-    Image new_image(BLANK, image.width(), image.height(), new_format);
+    Image new_image(image.width(), image.height(), BLANK, new_format);
 
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
@@ -873,7 +873,7 @@ Image resize_canvas(const Image& image, int new_w, int new_h, bool centered)
         throw std::invalid_argument("The new dimensions must be positive");
     }
 
-    Image new_image(BLANK, new_w, new_h, image.format());
+    Image new_image(new_w, new_h, BLANK, image.format());
 
     int offset_x = 0;
     int offset_y = 0;
@@ -974,10 +974,10 @@ Image resize(const Image& image, int new_w, int new_h)
         );
     }
 
-    return Image(
+    return {
         new_data, new_w, new_h,
         image.format(), true
-    );
+    };
 }
 
 bool write_png(const Image& image, const std::string& path)
