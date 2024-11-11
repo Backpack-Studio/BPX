@@ -827,7 +827,7 @@ Image& rotate_90(Image& image)
         }
         image = Image(
             new_data, image.height(), image.width(),
-            image.format(), false, true
+            image.format(), true
         );
     }
 
@@ -974,8 +974,10 @@ Image resize(const Image& image, int new_w, int new_h)
         );
     }
 
-    return Image(new_data, new_w, new_h,
-                 image.format(), false, true);
+    return Image(
+        new_data, new_w, new_h,
+        image.format(), true
+    );
 }
 
 bool write_png(const Image& image, const std::string& path)

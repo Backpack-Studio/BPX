@@ -47,56 +47,69 @@ public:
 
 public:
     /**
-     * @brief Constructs an image from a file.
+     * @brief Loads an image from a file, supporting various formats.
      *
-     * This constructor loads an image from the specified file path. Optionally, it can
-     * flip the image vertically after loading.
+     * This constructor loads an image from the specified file, supporting the following formats:
+     * - **JPEG**: Baseline & progressive (12-bit-per-channel and arithmetic not supported).
+     * - **PNG**: Supports 1, 2, 4, 8, and 16 bits per channel.
+     * - **TGA**: Limited support (exact subset uncertain).
+     * - **BMP**: All except 1bpp and RLE-compressed.
+     * - **PSD**: Composited view only, without extra channels, supports 8/16 bits per channel.
+     * - **GIF**: Non-animated; always loads as 4 channels.
+     * - **HDR**: Radiance RGBE format.
+     * - **PIC**: Softimage PIC format.
+     * - **PNM**: Binary PPM and PGM only.
      *
-     * @param file_path The path to the image file.
-     * @param flip_vertically Whether to flip the image vertically after loading.
+     * The `flip_vertically` parameter is especially useful for graphics APIs like OpenGL,
+     * where vertical flipping aligns the image's orientation with the default texture coordinate system.
+     *
+     * @param file_path Path to the image file to be loaded.
+     * @param flip_vertically Whether to flip the image vertically upon loading.
      */
-    Image(const std::string& file_path, bool flip_vertically = false);
+    explicit Image(const std::string& file_path, bool flip_vertically = false);
 
     /**
-     * @brief Constructs an image from a single color.
+     * @brief Constructs a solid-colored image.
      *
-     * This constructor creates a new image of the specified size and pixel format, where
-     * all pixels are initialized to the specified color.
+     * Creates an image of the specified width, height, and pixel format, where all pixels are
+     * initialized to a single color. Useful for creating placeholders, backgrounds, or
+     * testing purposes.
      *
-     * @param color The color to initialize all pixels with.
+     * @param color The color to set for all pixels.
      * @param w The width of the image in pixels.
      * @param h The height of the image in pixels.
-     * @param format The pixel format to use for the image.
+     * @param format The pixel format for the image. Default is RGBA_U8.
      */
-    Image(Color color, int w, int h, PixelFormat format = PixelFormat::RGBA_U8);
+    explicit Image(Color color, int w, int h, PixelFormat format = PixelFormat::RGBA_U8);
 
     /**
-     * @brief Constructs an image from raw pixel data.
+     * @brief Constructs an image from an external pixel data source (makes a copy).
      *
-     * This constructor creates a new image using the provided raw pixel data.
+     * This constructor creates an image of the specified width, height, and pixel format,
+     * copying the data from the provided `pixels` pointer. This is useful for loading
+     * or duplicating existing pixel data without altering the source.
      *
-     * @param pixels A pointer to the raw pixel data.
-     * @param w The width of the image in pixels.
-     * @param h The height of the image in pixels.
-     * @param format The pixel format to use for the image.
+     * @param pixels Pointer to the source pixel data to copy.
+     * @param w Width of the image in pixels.
+     * @param h Height of the image in pixels.
+     * @param format Pixel format of the image.
      */
-    Image(const void* pixels, int w, int h, PixelFormat format);
+    explicit Image(const void* pixels, int w, int h, PixelFormat format);
 
     /**
-     * @brief Constructs an image from raw pixel data with ownership control.
+     * @brief Constructs an image from external pixel data without copying.
      *
-     * This constructor creates an image using the provided pixel data. It allows the caller
-     * to control whether the `Image` class should take ownership of the pixel data and 
-     * whether the data should be freed when the image is destroyed.
+     * This constructor uses the provided pixel data directly, without making a copy. If
+     * `owned` is set to `true`, the Image object will take ownership of the pixel data and
+     * free it using `std::free` when the image is destroyed.
      *
-     * @param pixels A pointer to the raw pixel data.
-     * @param w The width of the image in pixels.
-     * @param h The height of the image in pixels.
-     * @param format The pixel format to use for the image.
-     * @param copy Whether to copy the pixel data or not.
-     * @param should_be_free Whether to free the pixel data upon image destruction.
+     * @param pixels Pointer to the pixel data.
+     * @param w Width of the image in pixels.
+     * @param h Height of the image in pixels.
+     * @param format Pixel format of the image.
+     * @param owned Whether the Image object should take ownership of the pixel data and free it.
      */
-    Image(void* pixels, int w, int h, PixelFormat format, bool copy, bool should_be_free);
+    Image(void* pixels, int w, int h, PixelFormat format, bool owned);
 
     /**
      * @brief Destroys the image and frees any allocated resources.

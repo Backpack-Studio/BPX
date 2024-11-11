@@ -162,20 +162,9 @@ Image::Image(const void* pixels, int w, int h, PixelFormat format)
     std::memcpy(m_pixels, pixels, size);
 }
 
-Image::Image(void* pixels, int w, int h, PixelFormat format, bool copy, bool should_be_free)
-    : m_w(w), m_h(h), m_format(format), m_owned(should_be_free)
-{
-    if (copy) {
-        size_t size = w * h * pixel_size(format);
-        m_pixels = std::malloc(size);
-        if (m_pixels == nullptr) {
-            std::bad_alloc();
-        }
-        std::memcpy(m_pixels, pixels, size);
-    } else {
-        m_pixels = pixels;
-    }
-}
+Image::Image(void* pixels, int w, int h, PixelFormat format, bool owned)
+    : m_pixels(pixels), m_format(format), m_w(w), m_h(h), m_owned(owned)
+{ }
 
 Image::~Image()
 {
