@@ -460,63 +460,36 @@ struct Color
 
         return { h, s, v };
     }
-
-    /* Default colors */
-
-    static const Color WHITE;
-    static const Color BLACK;
-    static const Color BLANK;
-    static const Color LIGHTGRAY;
-    static const Color SILVER;
-    static const Color GRAY;
-    static const Color DARKGRAY;
-    static const Color YELLOW;
-    static const Color GOLD;
-    static const Color ORANGE;
-    static const Color PINK;
-    static const Color RED;
-    static const Color MAROON;
-    static const Color GREEN;
-    static const Color DARKGREEN;
-    static const Color SKYBLUE;
-    static const Color BLUE;
-    static const Color DARKBLUE;
-    static const Color PURPLE;
-    static const Color VIOLET;
-    static const Color DARKPURPLE;
-    static const Color BEIGE;
-    static const Color BROWN;
-    static const Color DARKBROWN;
-    static const Color MAGENTA;
-    static const Color CYAN;
 };
 
-constexpr Color Color::WHITE        = Color(255, 255, 255, 255);
-constexpr Color Color::BLACK        = Color(0, 0, 0, 255);
-constexpr Color Color::BLANK        = Color(0, 0, 0, 0);
-constexpr Color Color::LIGHTGRAY    = Color(211, 211, 211, 255);
-constexpr Color Color::SILVER       = Color(192, 192, 192, 255);
-constexpr Color Color::GRAY         = Color(127, 127, 127, 255);
-constexpr Color Color::DARKGRAY     = Color(80, 80, 80, 255);
-constexpr Color Color::YELLOW       = Color(255, 255, 0, 255);
-constexpr Color Color::GOLD         = Color(255, 215, 0, 255);
-constexpr Color Color::ORANGE       = Color(255, 165, 0, 255);
-constexpr Color Color::PINK         = Color(255, 105, 180, 255);
-constexpr Color Color::RED          = Color(255, 0, 0, 255);
-constexpr Color Color::MAROON       = Color(128, 0, 0, 255);
-constexpr Color Color::GREEN        = Color(0, 255, 0, 255);
-constexpr Color Color::DARKGREEN    = Color(0, 100, 0, 255);
-constexpr Color Color::SKYBLUE      = Color(135, 206, 235, 255);
-constexpr Color Color::BLUE         = Color(0, 0, 255, 255);;
-constexpr Color Color::DARKBLUE     = Color(0, 0, 100, 255);
-constexpr Color Color::PURPLE       = Color(127, 0, 127, 255);
-constexpr Color Color::VIOLET       = Color(238, 130, 238, 255);
-constexpr Color Color::DARKPURPLE   = Color(79, 0, 79, 255);
-constexpr Color Color::BEIGE        = Color(255, 198, 153, 255);
-constexpr Color Color::BROWN        = Color(139, 69, 19, 255);
-constexpr Color Color::DARKBROWN    = Color(92, 64, 51, 255);
-constexpr Color Color::MAGENTA      = Color(255, 0, 255, 255);
-constexpr Color Color::CYAN         = Color(0, 255, 255, 255);
+/* Default Colors */
+
+constexpr Color WHITE        = Color(255, 255, 255, 255);
+constexpr Color BLACK        = Color(0, 0, 0, 255);
+constexpr Color BLANK        = Color(0, 0, 0, 0);
+constexpr Color LIGHTGRAY    = Color(211, 211, 211, 255);
+constexpr Color SILVER       = Color(192, 192, 192, 255);
+constexpr Color GRAY         = Color(127, 127, 127, 255);
+constexpr Color DARKGRAY     = Color(80, 80, 80, 255);
+constexpr Color YELLOW       = Color(255, 255, 0, 255);
+constexpr Color GOLD         = Color(255, 215, 0, 255);
+constexpr Color ORANGE       = Color(255, 165, 0, 255);
+constexpr Color PINK         = Color(255, 105, 180, 255);
+constexpr Color RED          = Color(255, 0, 0, 255);
+constexpr Color MAROON       = Color(128, 0, 0, 255);
+constexpr Color GREEN        = Color(0, 255, 0, 255);
+constexpr Color DARKGREEN    = Color(0, 100, 0, 255);
+constexpr Color SKYBLUE      = Color(135, 206, 235, 255);
+constexpr Color BLUE         = Color(0, 0, 255, 255);;
+constexpr Color DARKBLUE     = Color(0, 0, 100, 255);
+constexpr Color PURPLE       = Color(127, 0, 127, 255);
+constexpr Color VIOLET       = Color(238, 130, 238, 255);
+constexpr Color DARKPURPLE   = Color(79, 0, 79, 255);
+constexpr Color BEIGE        = Color(255, 198, 153, 255);
+constexpr Color BROWN        = Color(139, 69, 19, 255);
+constexpr Color DARKBROWN    = Color(92, 64, 51, 255);
+constexpr Color MAGENTA      = Color(255, 0, 255, 255);
+constexpr Color CYAN         = Color(0, 255, 255, 255);
 
 } // namesapce bpx
 

@@ -96,50 +96,52 @@ constexpr size_t pixel_size(PixelFormat format) noexcept {
     switch (format) {
 
         case PixelFormat::L_U8:
-            return 1;  ///< Luminance (grayscale) with unsigned 8-bit values.
+            return 1;               ///< Luminance (grayscale) with unsigned 8-bit values.
 
         case PixelFormat::L_F16:
         case PixelFormat::LA_U8:
-            return 2;  ///< Luminance (16-bit floating-point) or Luminance + Alpha with 8-bit values.
+            return 2;               ///< Luminance (16-bit floating-point) or Luminance + Alpha with 8-bit values.
 
         case PixelFormat::RGB_U8:
         case PixelFormat::BGR_U8:
-            return 3;  ///< RGB or BGR format with unsigned 8-bit values (3 channels).
+            return 3;               ///< RGB or BGR format with unsigned 8-bit values (3 channels).
 
         case PixelFormat::L_F32:
         case PixelFormat::LA_F16:
         case PixelFormat::RGB_565:
         case PixelFormat::BGR_565:
-            return 4;  ///< Luminance (32-bit floating-point), Luminance + Alpha (16-bit), or RGB/BGR formats with 5-6 bits per channel.
+            return 4;               /*< Luminance (32-bit floating-point), Luminance + Alpha (16-bit),
+                                     *  or RGB/BGR formats with 5-6 bits per channel.
+                                     */
 
         case PixelFormat::RGB_F16:
         case PixelFormat::BGR_F16:
-            return 6;  ///< RGB or BGR format with 16-bit floating-point values (per channel).
+            return 6;               ///< RGB or BGR format with 16-bit floating-point values (per channel).
 
         case PixelFormat::LA_F32:
-            return 8;  ///< Luminance + Alpha format with 32-bit floating-point values (per channel).
+            return 8;               ///< Luminance + Alpha format with 32-bit floating-point values (per channel).
 
         case PixelFormat::RGB_F32:
         case PixelFormat::BGR_F32:
-            return 12; ///< RGB or BGR format with 32-bit floating-point values (per channel).
+            return 12;              ///< RGB or BGR format with 32-bit floating-point values (per channel).
 
         case PixelFormat::RGBA_5551:
         case PixelFormat::BGRA_5551:
         case PixelFormat::RGBA_4444:
         case PixelFormat::BGRA_4444:
-            return 16; ///< Packed RGBA/BGRA formats with 5/4 bits for each channel.
+            return 16;              ///< Packed RGBA/BGRA formats with 5/4 bits for each channel.
 
         case PixelFormat::RGBA_U8:
         case PixelFormat::BGRA_U8:
-            return 32; ///< RGBA/BGRA format with unsigned 8-bit values (per channel).
+            return 32;              ///< RGBA/BGRA format with unsigned 8-bit values (per channel).
 
         case PixelFormat::RGBA_F16:
         case PixelFormat::BGRA_F16:
-            return 64; ///< RGBA/BGRA format with 16-bit floating-point values (per channel).
+            return 64;              ///< RGBA/BGRA format with 16-bit floating-point values (per channel).
 
         case PixelFormat::RGBA_F32:
         case PixelFormat::BGRA_F32:
-            return 128; ///< RGBA/BGRA format with 32-bit floating-point values (per channel).
+            return 128;             ///< RGBA/BGRA format with 32-bit floating-point values (per channel).
 
     }
 
@@ -163,12 +165,12 @@ constexpr size_t pixel_comp(PixelFormat format) noexcept {
         case PixelFormat::L_U8:
         case PixelFormat::L_F16:
         case PixelFormat::L_F32:
-            return 1;  ///< Luminance formats (1 component).
+            return 1;
 
         case PixelFormat::LA_U8:
         case PixelFormat::LA_F16:
         case PixelFormat::LA_F32:
-            return 2;  ///< Luminance + Alpha formats (2 components).
+            return 2;
 
         case PixelFormat::RGB_565:
         case PixelFormat::BGR_565:
@@ -178,7 +180,7 @@ constexpr size_t pixel_comp(PixelFormat format) noexcept {
         case PixelFormat::BGR_F16:
         case PixelFormat::RGB_F32:
         case PixelFormat::BGR_F32:
-            return 3;  ///< RGB or BGR formats (3 components).
+            return 3;
 
         case PixelFormat::RGBA_5551:
         case PixelFormat::BGRA_5551:
@@ -190,7 +192,7 @@ constexpr size_t pixel_comp(PixelFormat format) noexcept {
         case PixelFormat::BGRA_F16:
         case PixelFormat::RGBA_F32:
         case PixelFormat::BGRA_F32:
-            return 4;  ///< RGBA or BGRA formats (4 components).
+            return 4;
 
     }
 

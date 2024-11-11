@@ -995,10 +995,10 @@ constexpr Color lerp(Color a, Color b, float t) {
  *
  * @param dst The destination color to be blended.
  * @param src The source color to blend with the destination color.
- * @param mode The blend mode to use for the blending operation. Default is `BlendMode::REPLACE`.
+ * @param mode The blend mode to use for the blending operation.
  * @return The resulting blended color.
  */
-constexpr Color blend(Color dst, Color src, BlendMode mode = BlendMode::REPLACE) noexcept {
+constexpr Color blend(Color dst, Color src, BlendMode mode) noexcept {
     constexpr auto clamp_ubyte = [](int value) -> uint8_t {
         return static_cast<uint8_t>(std::max(0, std::min(255, value)));
     };

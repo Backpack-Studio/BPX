@@ -33,8 +33,8 @@ int main()
         bpx::PixelFormat::BGRA_U8, false, false
     );
 
-    bpx::Image image = bpx::Image(bpx::Color::BLACK, 128, 128);
-    bpx::circle_gradient(image, 64, 64, 64, bpx::Color::GREEN, bpx::Color::BLANK);
+    bpx::Image image = bpx::Image(bpx::BLACK, 128, 128);
+    bpx::circle_gradient(image, 64, 64, 64, bpx::GREEN, bpx::BLANK);
 
     bool running = true;
 
@@ -47,7 +47,7 @@ int main()
             }
         }
 
-        bpx::fill(bpx_surface, bpx::Color::BLUE);
+        bpx::fill(bpx_surface, bpx::BLUE);
 
         bpx::draw(
             bpx_surface, 0, 0, 800, 600,
@@ -59,8 +59,8 @@ int main()
             return blend(color, x ^ y, bpx::BlendMode::ADD);
         });
 
-        bpx::line(bpx_surface, 0, 0, 800, 600, 4, bpx::Color::RED);
-        bpx::line(bpx_surface, 0, 600, 800, 0, 4, bpx::Color::RED);
+        bpx::line(bpx_surface, 0, 0, 800, 600, 4, bpx::RED);
+        bpx::line(bpx_surface, 0, 600, 800, 0, 4, bpx::RED);
 
         SDL_UpdateWindowSurface(win);
     }

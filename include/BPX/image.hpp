@@ -242,14 +242,18 @@ public:
      *
      * @return The width of the image in pixels.
      */
-    int width() const { return m_w; }
+    int width() const {
+        return m_w;
+    }
 
     /**
      * @brief Gets the height of the image.
      *
      * @return The height of the image in pixels.
      */
-    int height() const { return m_h; }
+    int height() const {
+        return m_h;
+    }
 
     /**
      * @brief Gets the dimensions (width and height) of the image.
@@ -265,7 +269,9 @@ public:
      *
      * @return The total number of pixels (width * height).
      */
-    size_t size() const { return m_w * m_h; }
+    size_t size() const {
+        return m_w * m_h;
+    }
 
     /**
      * @brief Gets the pitch (stride) of the image.
@@ -275,35 +281,45 @@ public:
      *
      * @return The pitch of the image in bytes.
      */
-    size_t pitch() const { return m_w * pixel_size(m_format); }
+    size_t pitch() const {
+        return m_w * pixel_size(m_format);
+    }
 
     /**
      * @brief Gets the size of the image's data (in bytes).
      *
      * @return The size of the image's pixel data in bytes.
      */
-    size_t data_size() const { return m_h * pitch(); }
+    size_t data_size() const {
+        return m_h * pitch();
+    }
 
     /**
      * @brief Gets the pixel format of the image.
      *
      * @return The pixel format used by the image.
      */
-    PixelFormat format() const { return m_format; }
+    PixelFormat format() const {
+        return m_format;
+    }
 
     /**
      * @brief Gets the raw pixel data (const version).
      *
      * @return A pointer to the raw pixel data (const version).
      */
-    const void* data() const { return m_pixels; }
+    const void* data() const {
+        return m_pixels;
+    }
 
     /**
      * @brief Gets the raw pixel data (non-const version).
      *
      * @return A pointer to the raw pixel data (non-const version).
      */
-    void* data() { return m_pixels; }
+    void* data() {
+        return m_pixels;
+    }
     
 private:
     void* m_pixels;         ///< Pointer to the pixel data.
