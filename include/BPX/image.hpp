@@ -202,7 +202,10 @@ public:
      * @return The color of the pixel at the specified coordinates.
      */
     Color get(int x, int y) const {
-        return get(y * m_w + x);
+        if (x >= 0 && x < width() && y >= 0 && y < height()) {
+            return get_unsafe(y * m_w + x);
+        }
+        return {};
     }
 
     /**
@@ -234,7 +237,10 @@ public:
      * @return A reference to the current `Image` object.
      */
     Image& set(int x, int y, Color color) {
-        return set(y * m_w + x, color);
+        if (x >= 0 && x < width() && y >= 0 && y < height()) {
+            return set_unsafe(y * m_w + x, color);
+        }
+        return *this;
     }
 
     /**
