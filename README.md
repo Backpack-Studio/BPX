@@ -14,14 +14,27 @@ BPX can be used independently or alongside other Backpack libraries like Backpac
 - **Efficient Memory Management:** Flexible image creation from static memory or external sources with ownership handling.
 
 ## Table of Contents
-1. [Installation](#installation)
-2. [Usage](#usage)
-3. [API Reference](#api-reference)
+1. [Dependencies](#dependencies)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [API Reference](#api-reference)
     - [Image Loading & Creation](#image-loading--creation)
     - [Pixel Manipulation](#pixel-manipulation)
     - [Color Operations](#color-operations)
     - [Geometric Primitives](#geometric-primitives)
-4. [Examples](#examples)
+5. [Examples](#examples)
+
+---
+
+## Dependencies
+
+BPX includes the following third-party header-only libraries in the `external` folder, which provide essential image loading, resizing, and writing capabilities:
+
+- **[stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)**: Handles image loading for various formats (JPEG, PNG, BMP, PSD, etc.) and is used to import images into the library.
+- **[stb_image_resize2.h](https://github.com/nothings/stb/blob/master/stb_image_resize2.h)**: Provides high-quality image resizing algorithms for scaling images to new dimensions.
+- **[stb_image_write.h](https://github.com/nothings/stb/blob/master/stb_image_write.h)**: Supports saving images in multiple formats, including PNG, BMP, TGA, and JPEG.
+
+These files are integrated directly into BPX, meaning no additional installation is required to use the library's full image processing capabilities.
 
 ---
 
