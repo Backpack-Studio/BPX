@@ -162,6 +162,46 @@ struct Color
     }
 
     /**
+     * @brief Create a color from individual RGB and alpha float components.
+     *
+     * This static function creates a color by directly converting the provided
+     * RGB and alpha float components (ranging from 0.0 to 255.0) to an 8-bit format.
+     * Each component is scaled and converted to an 8-bit integer.
+     *
+     * @param r The red component of the color as a float in the range [0.0, 255.0].
+     * @param g The green component of the color as a float in the range [0.0, 255.0].
+     * @param b The blue component of the color as a float in the range [0.0, 255.0].
+     * @param a The alpha (transparency) component of the color as a float in the range [0.0, 255.0] (default is 255).
+     * @return The resulting color created from the specified RGB and alpha components.
+     */
+    static constexpr Color from_floats(float r, float g, float b, float a = 1.0f) {
+        return {
+            static_cast<uint8_t>(r / 255),
+            static_cast<uint8_t>(g / 255),
+            static_cast<uint8_t>(b / 255),
+            static_cast<uint8_t>(a / 255)
+        };
+    }
+
+    /**
+     * @brief Create a grayscale color with optional alpha transparency.
+     *
+     * This static function creates a grayscale color by taking a single gray-level float component
+     * and applying it to each RGB channel. The gray value is scaled and converted to an 8-bit format.
+     *
+     * @param gray The gray component of the color as a float in the range [0.0, 255.0], applied to each RGB channel.
+     * @param alpha The alpha (transparency) component of the color as a float in the range [0.0, 255.0] (default is 255).
+     * @return The resulting grayscale color created from the specified gray and alpha components.
+     */
+    static constexpr Color from_gray(float gray, float alpha = 1.0f) {
+        uint8_t g = gray / 255;
+        return {
+            g, g, g,
+            static_cast<uint8_t>(alpha / 255)
+        };
+    }
+
+    /**
      * @brief Default constructor for color, initializes the color as transparent black.
      */
     constexpr Color()
