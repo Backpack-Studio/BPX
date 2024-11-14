@@ -10,6 +10,7 @@ option(BPX_BUILD_EXAMPLES "Build BPX examples" ${PROJECT_IS_TOP_LEVEL})
 
 # Library target
 add_library(${PROJECT_NAME} STATIC
+    src/generation.cpp
     src/algorithm.cpp
     src/image.cpp
 )
