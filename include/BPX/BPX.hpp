@@ -20,9 +20,11 @@
 #ifndef BPX_HPP
 #define BPX_HPP
 
+#include "./generation.hpp"
 #include "./algorithm.hpp"
 #include "./color.hpp"
 #include "./image.hpp"
 #include "./pixel.hpp"
+#include "./ramp.hpp"
 
 #endif // BPX_HPP
