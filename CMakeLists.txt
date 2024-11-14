@@ -37,6 +37,9 @@ if(BPX_BUILD_EXAMPLES)
         message(WARNING "SDL2 not found, examples will not be built. The BPX library will still be built.")
     else()
         add_executable(sdl_example examples/sdl_example.cpp)
+        if(WIN32)
+            target_compile_definitions(sdl_example PRIVATE SDL_MAIN_HANDLED)
+        endif()
         target_link_libraries(sdl_example 
             PRIVATE 
                 ${PROJECT_NAME}
