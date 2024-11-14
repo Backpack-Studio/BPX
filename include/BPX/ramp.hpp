@@ -45,6 +45,10 @@ public:
     struct Point {
         Color color;    ///< The color at this point.
         float position; ///< The position along the ramp (0.0 to 1.0).
+
+        constexpr Point(Color color, float position) noexcept
+            : color(color), position(position)
+        { }
     };
 
 public:
