@@ -37,7 +37,7 @@ namespace bpx {
  *        pixel color, and returns the new color to apply to that pixel.
  * @return A reference to the modified image.
  */
-Image& map(Image& image, const Image::Mapper& mapper);
+void map(Image& image, const Image::Mapper& mapper);
 
 /**
  * @brief Applies a mapping function to a specified rectangular region in the image.
@@ -54,7 +54,7 @@ Image& map(Image& image, const Image::Mapper& mapper);
  *        pixel color, and returns the new color to apply to that pixel.
  * @return A reference to the modified image.
  */
-Image& map(Image& image, int x_start, int y_start, int width, int height, const Image::Mapper& mapper);
+void map(Image& image, int x_start, int y_start, int width, int height, const Image::Mapper& mapper);
 
 /**
  * @brief Fills the entire image with a specified color.
@@ -66,7 +66,7 @@ Image& map(Image& image, int x_start, int y_start, int width, int height, const 
  * @param color The color to apply to every pixel in the image.
  * @return A reference to the modified image.
  */
-Image& fill(Image& image, const Color& color);
+void fill(Image& image, const Color& color);
 
 /**
  * @brief Draws a single point on the image at the specified coordinates.
@@ -81,7 +81,7 @@ Image& fill(Image& image, const Color& color);
  * @param mode The blending mode to use when applying the color. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& point(Image& image, int x, int y, Color color, BlendMode mode = BlendMode::REPLACE);
+void point(Image& image, int x, int y, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a straight line between two points on the image using a specified color.
@@ -98,7 +98,7 @@ Image& point(Image& image, int x, int y, Color color, BlendMode mode = BlendMode
  * @param mode The blending mode to use when applying the color. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& line(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
+void line(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a straight line between two points on the image, applying a mapping function to each pixel.
@@ -114,7 +114,7 @@ Image& line(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point.
  * @return A reference to the modified image.
  */
-Image& line(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
+void line(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a thick line between two points on the image using a specified color.
@@ -132,7 +132,7 @@ Image& line(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& m
  * @param mode The blending mode to use when applying the color. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
+void line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick line between two points on the image, applying a mapping function to each pixel.
@@ -150,7 +150,7 @@ Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point.
  * @return A reference to the modified image.
  */
-Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
+void line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a gradient line between two points on the image, transitioning between two colors.
@@ -169,7 +169,7 @@ Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick gradient line between two points on the image, transitioning between two colors.
@@ -189,7 +189,7 @@ Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Col
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a solid rectangle on the image with a specified color.
@@ -207,7 +207,7 @@ Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Co
  * @param mode The blending mode to use when applying the color. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a rectangle on the image using a mapping function to define each pixel's color.
@@ -224,7 +224,7 @@ Image& rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, Blen
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point.
  * @return A reference to the modified image.
  */
-Image& rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
+void rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a gradient-filled rectangle on the image with specified corner colors.
@@ -246,7 +246,7 @@ Image& rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapp
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
+void rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
                           Color col_tl, Color col_tr,
                           Color col_br, Color col_bl,
                           BlendMode mode = BlendMode::REPLACE);
@@ -266,7 +266,7 @@ Image& rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
  * @param mode The blending mode to use when applying the outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws the outline of a rectangle on the image, applying a mapping function to define the color of each point.
@@ -283,7 +283,7 @@ Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point on the outline.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a thick outline of a rectangle on the image with a specified color.
@@ -302,7 +302,7 @@ Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image
  * @param mode The blending mode to use when applying the outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick outline of a rectangle on the image using a mapping function to determine the color of each pixel.
@@ -321,7 +321,7 @@ Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, 
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point on the outline.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a gradient outline of a rectangle on the image with specified corner colors.
@@ -343,7 +343,7 @@ Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, 
  * @param mode The blending mode to use when applying the gradient outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
+void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
                                 Color col_tl, Color col_tr,
                                 Color col_br, Color col_bl,
                                 BlendMode mode = BlendMode::REPLACE);
@@ -370,7 +370,7 @@ Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
  * @param mode The blending mode to use when applying the gradient outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
+void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
                                 Color col_tl, Color col_tr, Color col_br, Color col_bl,
                                 BlendMode mode = BlendMode::REPLACE);
 
@@ -389,7 +389,7 @@ Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, in
  * @param mode The blending mode to use when drawing the circle. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& circle(Image& image, int cx, int cy, int radius, Color color, BlendMode mode = BlendMode::REPLACE);
+void circle(Image& image, int cx, int cy, int radius, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a filled circle on the image using a mapping function to determine the color of each pixel.
@@ -405,7 +405,7 @@ Image& circle(Image& image, int cx, int cy, int radius, Color color, BlendMode m
  * @param mapper A function that takes x and y coordinates and returns the color to apply at that point in the circle.
  * @return A reference to the modified image.
  */
-Image& circle(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper);
+void circle(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a circle with a gradient fill on the image, transitioning between two colors.
@@ -423,7 +423,7 @@ Image& circle(Image& image, int cx, int cy, int radius, const Image::Mapper& map
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a circle outline on the image with a specified color.
@@ -439,7 +439,7 @@ Image& circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color
  * @param mode The blending mode to use when drawing the circle outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& circle_lines(Image& image, int cx, int cy, int radius, Color color, BlendMode mode = BlendMode::REPLACE);
+void circle_lines(Image& image, int cx, int cy, int radius, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a circle outline on the image with a mapping function to determine the color of each pixel.
@@ -454,7 +454,7 @@ Image& circle_lines(Image& image, int cx, int cy, int radius, Color color, Blend
  * @param mapper A function that takes x and y coordinates and returns the color to apply at each point along the outline.
  * @return A reference to the modified image.
  */
-Image& circle_lines(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper);
+void circle_lines(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a thick circle outline on the image with a specified color.
@@ -472,7 +472,7 @@ Image& circle_lines(Image& image, int cx, int cy, int radius, const Image::Mappe
  * @param mode The blending mode to use when drawing the circle outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
+void circle_lines(Image& image, int cx, int cy, int radius, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick circle outline on the image using a mapping function for color.
@@ -489,7 +489,7 @@ Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, Color c
  * @param mapper A function that takes x and y coordinates and returns the color to apply at each point along the outline.
  * @return A reference to the modified image.
  */
-Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, const Image::Mapper& mapper);
+void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a section of a source image onto a destination image with optional blending.
@@ -512,7 +512,7 @@ Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, const I
  * @param mode The blending mode to use when drawing the image section. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified destination image.
  */
-Image& draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
+void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
             Image& src, int x_src, int y_src, int w_src, int h_src,
             BlendMode mode = BlendMode::REPLACE);
 
@@ -527,7 +527,7 @@ Image& draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
  * @param factor The saturation factor. Values greater than 1 increase saturation, values between 0 and 1 decrease it.
  * @return A reference to the modified image.
  */
-Image& saturation(Image& image, float factor);
+void saturation(Image& image, float factor);
 
 /**
  * @brief Adjusts the brightness of the image.
@@ -540,7 +540,7 @@ Image& saturation(Image& image, float factor);
  * @param factor The brightness factor. Positive values increase brightness, negative values decrease it.
  * @return A reference to the modified image.
  */
-Image& brightness(Image& image, float factor);
+void brightness(Image& image, float factor);
 
 /**
  * @brief Adjusts the contrast of the image.
@@ -553,7 +553,7 @@ Image& brightness(Image& image, float factor);
  * @param factor The contrast factor. Values greater than 1 increase contrast, values between 0 and 1 reduce it.
  * @return A reference to the modified image.
  */
-Image& contrast(Image& image, float factor);
+void contrast(Image& image, float factor);
 
 /**
  * @brief Adjusts the saturation of the image.
@@ -566,7 +566,7 @@ Image& contrast(Image& image, float factor);
  * @param factor The saturation factor. Values greater than 1 increase saturation, values between 0 and 1 decrease it.
  * @return A reference to the modified image.
  */
-Image& saturation(Image& image, float factor);
+void saturation(Image& image, float factor);
 
 /**
  * @brief Adjusts the brightness of the image.
@@ -579,7 +579,7 @@ Image& saturation(Image& image, float factor);
  * @param factor The brightness factor. Positive values increase brightness, negative values decrease it.
  * @return A reference to the modified image.
  */
-Image& brightness(Image& image, float factor);
+void brightness(Image& image, float factor);
 
 /**
  * @brief Adjusts the contrast of the image.
@@ -592,7 +592,7 @@ Image& brightness(Image& image, float factor);
  * @param factor The contrast factor. Values greater than 1 increase contrast, values between 0 and 1 reduce it.
  * @return A reference to the modified image.
  */
-Image& contrast(Image& image, float factor);
+void contrast(Image& image, float factor);
 
 /**
  * @brief Flips the image horizontally.
@@ -604,7 +604,7 @@ Image& contrast(Image& image, float factor);
  * @param image The image to modify.
  * @return A reference to the modified image with horizontal flip.
  */
-Image& flip_horizontal(Image& image);
+void flip_horizontal(Image& image);
 
 /**
  * @brief Flips the image vertically.
@@ -616,7 +616,7 @@ Image& flip_horizontal(Image& image);
  * @param image The image to modify.
  * @return A reference to the modified image with vertical flip.
  */
-Image& flip_vertical(Image& image);
+void flip_vertical(Image& image);
 
 /**
  * @brief Rotates the image by 90 degrees clockwise.
@@ -631,7 +631,7 @@ Image& flip_vertical(Image& image);
  * @param image The image to rotate.
  * @return A reference to the rotated image.
  */
-Image& rotate_90(Image& image);
+void rotate_90(Image& image);
 
 /**
  * @brief Rotates the image by 180 degrees.
@@ -643,7 +643,7 @@ Image& rotate_90(Image& image);
  * @param image The image to rotate.
  * @return A reference to the rotated image.
  */
-Image& rotate_180(Image& image);
+void rotate_180(Image& image);
 
 /**
  * @brief Creates a copy of the given image.

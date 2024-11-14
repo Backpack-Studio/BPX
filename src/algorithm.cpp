@@ -43,7 +43,7 @@
 
 #define PF_LINE_TRAVEL(PIXEL_CODE)                                                          \
     if (clip_line(&x1, &y1, &x2, &y2, 0, 0, image.width() - 1, image.height() - 1) == 0) {  \
-        return image;                                                                       \
+        return;                                                                             \
     }                                                                                       \
     int_fast8_t y_longer = 0;                                                               \
     int short_len = y2 - y1;                                                                \
@@ -381,7 +381,7 @@ int_fast8_t clip_line(int* x1, int* y1, int* x2, int* y2, int xmin, int ymin, in
 
 namespace bpx {
 
-Image& map(Image& image, const Image::Mapper& mapper)
+void map(Image& image, const Image::Mapper& mapper)
 {
     for (int y = 0; y < image.height(); y++) {
         for (int x = 0; x < image.width(); x++) {
@@ -390,10 +390,9 @@ Image& map(Image& image, const Image::Mapper& mapper)
             image.set_unsafe(offset, color);
         }
     }
-    return image;
 }
 
-Image& map(Image& image, int x_start, int y_start, int width, int height, const Image::Mapper& mapper)
+void map(Image& image, int x_start, int y_start, int width, int height, const Image::Mapper& mapper)
 {
     x_start = std::clamp(x_start, 0, image.width());
     y_start = std::clamp(y_start, 0, image.height());
@@ -408,74 +407,64 @@ Image& map(Image& image, int x_start, int y_start, int width, int height, const 
             image.set_unsafe(offset, color);
         }
     }
-
-    return image;
 }
 
-Image& fill(Image& image, const Color& color)
+void fill(Image& image, const Color& color)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         image.set_unsafe(i, color);
     }
-    return image;
 }
 
-Image& point(Image& image, int x, int y, Color color, BlendMode mode)
+void point(Image& image, int x, int y, Color color, BlendMode mode)
 {
-    return image.set(x, y, blend(image.get(x, y), color, mode));
+    image.set(x, y, blend(image.get(x, y), color, mode));
 }
 
-Image& line(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
+void line(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
 {
     PF_LINE_TRAVEL({
         image.set_unsafe(offset, blend(image.get_unsafe(offset), color, mode));
     })
-
-    return image;
 }
 
-Image& line(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
+void line(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
 {
     PF_LINE_TRAVEL({
         image.set_unsafe(offset, mapper(x, y, image.get_unsafe(offset)));
     });
-    return image;
 }
 
-Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode)
+void line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode)
 {
     PF_LINE_THICK_TRAVEL({
         line(image, x1, y1, x2, y2, color, mode);
     });
-    return image;
 }
 
-Image& line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper)
+void line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper)
 {
     PF_LINE_THICK_TRAVEL({
         line(image, x1, y1, x2, y2, mapper);
     });
-    return image;
 }
 
-Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode)
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode)
 {
     PF_LINE_TRAVEL({
         image.set_unsafe(offset, blend(image.get_unsafe(offset), lerp(c1, c2, static_cast<float>(i) / end), mode));
     });
-    return image;
 }
 
-Image& line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode)
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode)
 {
     PF_LINE_THICK_TRAVEL({
         line_gradient(image, x1, y1, x2, y2, c1, c2, mode);
     });
-    return image;
 }
 
-Image& rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
+void rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
 {
     if (x1 > x2) std::swap(x1, x2);
     if (y1 > y2) std::swap(y1, y2);
@@ -488,11 +477,9 @@ Image& rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, Blen
     PF_RECT_TRAVEL({
         image.set_unsafe(offset, blend(image.get_unsafe(offset), color, mode));
     });
-
-    return image;
 }
 
-Image& rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
+void rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
 {
     if (x1 > x2) std::swap(x1, x2);
     if (y1 > y2) std::swap(y1, y2);
@@ -505,11 +492,9 @@ Image& rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapp
     PF_RECT_TRAVEL({
         image.set_unsafe(offset, mapper(x, y, image.get_unsafe(offset)));
     });
-
-    return image;
 }
 
-Image& rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
+void rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
                           Color col_tl, Color col_tr,
                           Color col_br, Color col_bl,
                           BlendMode mode)
@@ -533,51 +518,41 @@ Image& rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
         Color col_final = lerp(col_top, col_bottom, static_cast<float>(iy) / h);
         image.set_unsafe(offset, blend(image.get_unsafe(offset), col_final, mode));
     });
-
-    return image;
 }
 
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
 {
     line(image, x1, y1, x2, y1, color, mode);
     line(image, x2, y1, x2, y2, color, mode);
     line(image, x2, y2, x1, y2, color, mode);
     line(image, x1, y2, x1, y1, color, mode);
-
-    return image;
 }
 
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
 {
     line(image, x1, y1, x2, y1, mapper);
     line(image, x2, y1, x2, y2, mapper);
     line(image, x2, y2, x1, y2, mapper);
     line(image, x1, y2, x1, y1, mapper);
-
-    return image;
 }
 
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode)
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode)
 {
     line(image, x1, y1, x2, y1, thick, color, mode);
     line(image, x2, y1, x2, y2, thick, color, mode);
     line(image, x2, y2, x1, y2, thick, color, mode);
     line(image, x1, y2, x1, y1, thick, color, mode);
-
-    return image;
 }
 
-Image& rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper)
+void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper)
 {
     line(image, x1, y1, x2, y1, thick, mapper);
     line(image, x2, y1, x2, y2, thick, mapper);
     line(image, x2, y2, x1, y2, thick, mapper);
     line(image, x1, y2, x1, y1, thick, mapper);
-
-    return image;
 }
 
-Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
+void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
                                 Color col_tl, Color col_tr,
                                 Color col_br, Color col_bl,
                                 BlendMode mode)
@@ -586,11 +561,9 @@ Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
     line_gradient(image, x2, y1, x2, y2, col_tr, col_br, mode);
     line_gradient(image, x2, y2, x1, y2, col_br, col_bl, mode);
     line_gradient(image, x1, y2, x1, y1, col_bl, col_tl, mode);
-
-    return image;
 }
 
-Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
+void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
                          Color col_tl, Color col_tr, Color col_br, Color col_bl,
                          BlendMode mode)
 {
@@ -598,27 +571,23 @@ Image& rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, in
     line_gradient(image, x2, y1, x2, y2, thick, col_tr, col_br, mode);
     line_gradient(image, x2, y2, x1, y2, thick, col_br, col_bl, mode);
     line_gradient(image, x1, y2, x1, y1, thick, col_bl, col_tl, mode);
-
-    return image;
 }
 
-Image& circle(Image& image, int cx, int cy, int radius, Color color, BlendMode mode)
+void circle(Image& image, int cx, int cy, int radius, Color color, BlendMode mode)
 {
     PF_CIRCLE_TRAVEL({
         image.set_unsafe(offset, blend(image.get_unsafe(offset), color, mode));
     })
-    return image;
 }
 
-Image& circle(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper)
+void circle(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper)
 {
     PF_CIRCLE_TRAVEL({
         image.set_unsafe(offset, mapper(x, y, image.get_unsafe(offset)));
     })
-    return image;
 }
 
-Image& circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c2, BlendMode mode)
+void circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c2, BlendMode mode)
 {
     PF_CIRCLE_TRAVEL_EX(
         { image.set_unsafe(offset, blend(image.get_unsafe(offset), lerp(c1, c2, sqrtf((i - cx) * (i - cx) + (cy + y - cy) * (cy + y - cy)) / radius), mode)); },
@@ -626,44 +595,39 @@ Image& circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color
         { image.set_unsafe(offset, blend(image.get_unsafe(offset), lerp(c1, c2, sqrtf((i - cx) * (i - cx) + (cy + x - cy) * (cy + x - cy)) / radius), mode)); },
         { image.set_unsafe(offset, blend(image.get_unsafe(offset), lerp(c1, c2, sqrtf((i - cx) * (i - cx) + (cy - x - cy) * (cy - x - cy)) / radius), mode)); }
     );
-    return image;
 }
 
-Image& circle_lines(Image& image, int cx, int cy, int radius, Color color, BlendMode mode)
+void circle_lines(Image& image, int cx, int cy, int radius, Color color, BlendMode mode)
 {
     PF_CIRCLE_LINE_TRAVEL({
         image.set_unsafe(offset, blend(image.get_unsafe(offset), color, mode));
     });
-    return image;
 }
 
-Image& circle_lines(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper)
+void circle_lines(Image& image, int cx, int cy, int radius, const Image::Mapper& mapper)
 {
     PF_CIRCLE_LINE_TRAVEL({
         image.set_unsafe(offset, mapper(x, y, image.get_unsafe(offset)));
     });
-    return image;
 }
 
-Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, Color color, BlendMode mode)
+void circle_lines(Image& image, int cx, int cy, int radius, int thick, Color color, BlendMode mode)
 {
     int ht = thick/2;
     for (int i = -ht; i <= ht; ++i) {
         circle_lines(image, cx, cy, radius + i, color, mode);
     }
-    return image;
 }
 
-Image& circle_lines(Image& image, int cx, int cy, int radius, int thick, const Image::Mapper& mapper)
+void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Image::Mapper& mapper)
 {
     int ht = thick/2;
     for (int i = -ht; i <= ht; ++i) {
         circle_lines(image, cx, cy, radius + i, mapper);
     }
-    return image;
 }
 
-Image& draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
+void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
             Image& src, int x_src, int y_src, int w_src, int h_src,
             BlendMode mode)
 {
@@ -693,61 +657,54 @@ Image& draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
             dst.set_unsafe(dst_x, dst_y, blend(col_dst, col_src, mode));
         }
     }
-    
-    return dst;
 }
 
-Image& saturation(Image& image, float factor)
+void saturation(Image& image, float factor)
 {
-    const size_t size = image.width() * image.height();
+    const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         Color color = image.get_unsafe(i);
         image.set_unsafe(i, bpx::saturation(color, factor));
     }
-    return image;
 }
 
-Image& brightness(Image& image, float factor)
+void brightness(Image& image, float factor)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         Color color = image.get_unsafe(i);
         image.set_unsafe(i, bpx::brightness(color, factor));
     }
-    return image;
 }
 
-Image& contrast(Image& image, float factor)
+void contrast(Image& image, float factor)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         Color color = image.get_unsafe(i);
         image.set_unsafe(i, bpx::contrast(color, factor));
     }
-    return image;
 }
 
-Image& opacity(Image& image, float alpha)
+void opacity(Image& image, float alpha)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         Color color = image.get_unsafe(i);
         image.set_unsafe(i, bpx::alpha(color, alpha));
     }
-    return image;
 }
 
-Image& invert(Image& image)
+void invert(Image& image)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
         Color color = image.get_unsafe(i);
         image.set_unsafe(i, bpx::invert(color));
     }
-    return image;
 }
 
-Image& flip_horizontal(Image& image)
+void flip_horizontal(Image& image)
 {
     size_t pitch = image.pitch();
     std::vector<uint8_t> row_buffer(pitch);
@@ -762,10 +719,9 @@ Image& flip_horizontal(Image& image)
             }
         }
     }
-    return image;
 }
 
-Image& flip_vertical(Image& image)
+void flip_vertical(Image& image)
 {
     size_t pitch = image.pitch();
     for (int y = 0; y < image.height() / 2; y++) {
@@ -778,10 +734,9 @@ Image& flip_vertical(Image& image)
             image.set_unsafe(bottom_offset, top_color);
         }
     }
-    return image;
 }
 
-Image& rotate_90(Image& image)
+void rotate_90(Image& image)
 {
     // Check if the image is square
     if (image.width() == image.height()) {
@@ -830,11 +785,9 @@ Image& rotate_90(Image& image)
             image.format(), true
         };
     }
-
-    return image;
 }
 
-Image& rotate_180(Image& image)
+void rotate_180(Image& image)
 {
     for (int y = 0; y < image.height(); y++) {
         for (int x = 0; x < image.width(); x++) {
@@ -846,7 +799,6 @@ Image& rotate_180(Image& image)
             }
         }
     }
-    return image;
 }
 
 Image copy(const Image& image)
