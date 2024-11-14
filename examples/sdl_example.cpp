@@ -34,8 +34,24 @@ int main()
         bpx::PixelFormat::BGRA_U8, false
     };
 
-    bpx::Image image = bpx::Image(128, 128); // create a 128x128 blank RGBA_U8 image
-    bpx::circle_gradient(image, 64, 64, 64, bpx::GREEN, bpx::BLANK);
+    // Generate xor pattern
+    bpx::Image im_xor = bpx::Image(128, 128, bpx::BLUE);
+    bpx::map(im_xor, [&bpx_surface](int x, int y, bpx::Color color){
+        return blend(color, x ^ y, bpx::BlendMode::ADD);
+    });
+
+    // Generate grid pattern
+    bpx::Image im_grid = bpx::generate_grid(128, 128, 16);
+
+    // Generate linear gradient
+    bpx::ColorRamp ramp1({ { bpx::WHITE, 0.0f }, { bpx::BLACK, 1.0f } });
+    bpx::Image im_linear = bpx::generate_gradient_linear(128, 128, ramp1, 64, 0, 64, 128);
+
+    // Generate radial gradient
+    bpx::ColorRamp ramp2({ { bpx::WHITE, 0.0f }, { bpx::RED, 0.5f }, { bpx::BLUE, 1.0f } });
+    bpx::Image im_radial = bpx::generate_gradient_radial(128, 128, ramp2, 64, 64, 128, 64);
+
+    // Main program
 
     bool running = true;
 
@@ -48,20 +64,27 @@ int main()
             }
         }
 
-        bpx::fill(bpx_surface, bpx::BLUE);
+        bpx::fill(bpx_surface, bpx::BLACK);
 
         bpx::draw(
-            bpx_surface, 0, 0, 800, 600,
-            image, 0, 0, 128, 128,
-            bpx::BlendMode::ADD
+            bpx_surface, 0, 0, 400, 300,
+            im_xor, 0, 0, 128, 128
         );
 
-        bpx::map(bpx_surface, [&bpx_surface](int x, int y, bpx::Color color){
-            return blend(color, x ^ y, bpx::BlendMode::ADD);
-        });
+        bpx::draw(
+            bpx_surface, 400, 0, 400, 300,
+            im_grid, 0, 0, 128, 128
+        );
 
-        bpx::line(bpx_surface, 0, 0, 800, 600, 4, bpx::RED);
-        bpx::line(bpx_surface, 0, 600, 800, 0, 4, bpx::RED);
+        bpx::draw(
+            bpx_surface, 0, 300, 400, 300,
+            im_linear, 0, 0, 128, 128
+        );
+
+        bpx::draw(
+            bpx_surface, 400, 300, 400, 300,
+            im_radial, 0, 0, 128, 128
+        );
 
         SDL_UpdateWindowSurface(win);
     }
