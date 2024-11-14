@@ -56,7 +56,7 @@ Image generate_gradient_linear_1d(int width, const ColorRamp& ramp, PixelFormat 
  * @param format The desired pixel format for the image (default is `PixelFormat::RGBA_U8`).
  * @return An `Image` object containing the generated 2D linear gradient.
  */
-Image generate_gradient_linear_2d(int width, int height, const ColorRamp& ramp,
+Image generate_gradient_linear(int width, int height, const ColorRamp& ramp,
                                   int x_start, int y_start, int x_end, int y_end,
                                   PixelFormat format = PixelFormat::RGBA_U8);
 
@@ -77,9 +77,89 @@ Image generate_gradient_linear_2d(int width, int height, const ColorRamp& ramp,
  * @param format The desired pixel format for the image (default is `PixelFormat::RGBA_U8`).
  * @return An `Image` object containing the generated 2D radial gradient.
  */
-Image generate_gradient_radial_2d(int width, int height, const ColorRamp& ramp,
+Image generate_gradient_radial(int width, int height, const ColorRamp& ramp,
                                   int x_start, int y_start, int x_end, int y_end,
                                   PixelFormat format = PixelFormat::RGBA_U8);
+
+/**
+ * @brief Generate a checkerboard pattern image.
+ * 
+ * This function generates a checkerboard pattern with alternating squares of 
+ * two colors. The checkerboard pattern consists of squares of the specified 
+ * size that alternate between the two given colors.
+ *
+ * @param width The width of the image in pixels.
+ * @param height The height of the image in pixels.
+ * @param square_size The size of each square in the checkerboard pattern.
+ * @param color1 The color of the first set of squares (default is black).
+ * @param color2 The color of the second set of squares (default is white).
+ * @param format The pixel format for the image (default is RGBA_U8).
+ * @return The generated image with the checkerboard pattern.
+ */
+Image generate_checkerboard(int width, int height, int square_size,
+                            const Color& color1 = BLACK, const Color& color2 = WHITE,
+                            PixelFormat format = PixelFormat::RGBA_U8);
+
+/**
+ * @brief Generate a striped pattern image.
+ * 
+ * This function generates a striped pattern by alternating stripes of two 
+ * colors. The stripes can be either vertical or horizontal, depending on 
+ * the specified orientation. The width of each stripe is defined by the 
+ * `stripe_width` parameter.
+ *
+ * @param width The width of the image in pixels.
+ * @param height The height of the image in pixels.
+ * @param stripe_width The width of each stripe in the pattern.
+ * @param color1 The color of the first set of stripes (default is black).
+ * @param color2 The color of the second set of stripes (default is white).
+ * @param vertical A boolean value to specify the orientation of stripes.
+ *                If true, the stripes are vertical, otherwise, they are horizontal (default is true).
+ * @param format The pixel format for the image (default is RGBA_U8).
+ * @return The generated image with the striped pattern.
+ */
+Image generate_stripes(int width, int height, int stripe_width,
+                       const Color& color1 = BLACK, const Color& color2 = WHITE,
+                       bool vertical = true, PixelFormat format = PixelFormat::RGBA_U8);
+
+/**
+ * @brief Generate a grid pattern image.
+ * 
+ * This function generates a grid pattern with alternating cells, where the 
+ * grid lines are drawn at regular intervals based on the `cell_size` parameter.
+ * The color of the grid lines and the fill color of the cells can be customized.
+ *
+ * @param width The width of the image in pixels.
+ * @param height The height of the image in pixels.
+ * @param cell_size The size of each cell in the grid.
+ * @param line_color The color of the grid lines (default is white).
+ * @param fill_color The color of the background cells (default is black).
+ * @param format The pixel format for the image (default is RGBA_U8).
+ * @return The generated image with the grid pattern.
+ */
+Image generate_grid(int width, int height, int cell_size,
+                    const Color& line_color = WHITE, const Color& fill_color = BLACK,
+                    PixelFormat format = PixelFormat::RGBA_U8);
+
+/**
+ * @brief Generate a polka dots pattern image.
+ * 
+ * This function generates a polka dots pattern where each dot is drawn in a 
+ * grid layout with a fixed radius and spacing. The color of the dots and the 
+ * background color can be customized.
+ *
+ * @param width The width of the image in pixels.
+ * @param height The height of the image in pixels.
+ * @param dot_radius The radius of each dot in the pattern.
+ * @param spacing The spacing between the centers of adjacent dots.
+ * @param dot_color The color of the dots (default is white).
+ * @param background_color The background color (default is black).
+ * @param format The pixel format for the image (default is RGBA_U8).
+ * @return The generated image with the polka dots pattern.
+ */
+Image generate_polka_dots(int width, int height, int dot_radius, int spacing,
+                          const Color& dot_color = WHITE, const Color& background_color = BLACK,
+                          PixelFormat format = PixelFormat::RGBA_U8);
 
 } // namespace bpx
 
