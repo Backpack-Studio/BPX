@@ -44,7 +44,7 @@ int main()
     bpx::Image im_grid = bpx::generate_grid(128, 128, 16);
 
     // Generate linear gradient
-    bpx::ColorRamp ramp1({ { bpx::WHITE, 0.0f }, { bpx::BLACK, 1.0f } });
+    bpx::ColorRamp ramp1(bpx::WHITE, bpx::BLACK);
     bpx::Image im_linear = bpx::generate_gradient_linear(128, 128, ramp1, 64, 0, 64, 128);
 
     // Generate radial gradient
