@@ -478,6 +478,24 @@ void circle_lines(Image& image, int cx, int cy, int radius, int thick,
 void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Image::Mapper& mapper);
 
 /**
+ * @brief Draws a portion of one image onto another image using a specified blend mode.
+ *
+ * This function copies a rectangular portion of the source image `src` defined by `(x, y)` as the top-left corner 
+ * and `(x + w, y + h)` as the bottom-right corner, and draws it onto the destination image `dst`. The image portion 
+ * is drawn using the specified blending mode, which determines how the source image is combined with the destination image.
+ *
+ * @param dst The destination image to modify.
+ * @param x The x-coordinate of the top-left corner of the portion to be copied from the source image.
+ * @param y The y-coordinate of the top-left corner of the portion to be copied from the source image.
+ * @param w The width of the portion to be copied from the source image.
+ * @param h The height of the portion to be copied from the source image.
+ * @param src The source image from which the portion is copied.
+ * @param mode The blending mode to use when applying the source image to the destination image.
+ * @return A reference to the modified destination image.
+ */
+void draw(Image& dst, int x, int y, int w, int h, Image& src, BlendMode mode = BlendMode::REPLACE);
+
+/**
  * @brief Draws a section of a source image onto a destination image with optional blending.
  *
  * This function draws a portion of the `src` image onto the `dst` image, where the section of the source image 

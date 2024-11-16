@@ -631,6 +631,11 @@ void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Ima
     }
 }
 
+void draw(Image& dst, int x, int y, int w, int h, Image& src, BlendMode mode)
+{
+    draw(dst, x, y, w, h, src, 0, 0, src.width(), src.height(), mode);
+}
+
 void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
           Image& src, int x_src, int y_src, int w_src, int h_src,
           BlendMode mode)
