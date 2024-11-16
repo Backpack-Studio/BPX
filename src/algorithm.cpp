@@ -632,22 +632,23 @@ void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Ima
 }
 
 void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
-            Image& src, int x_src, int y_src, int w_src, int h_src,
-            BlendMode mode)
+          Image& src, int x_src, int y_src, int w_src, int h_src,
+          BlendMode mode)
 {
-    x_dst = std::clamp(x_dst, 0, dst.width());
-    y_dst = std::clamp(y_dst, 0, dst.height());
-    w_dst = std::clamp(w_dst, 0, dst.width());
-    h_dst = std::clamp(h_dst, 0, dst.height());
+    // Clamp destination coordinates and size
+    x_dst = std::clamp(x_dst, 0, dst.width() - 1);
+    y_dst = std::clamp(y_dst, 0, dst.height() - 1);
+    w_dst = std::clamp(w_dst, 0, dst.width() - x_dst);
+    h_dst = std::clamp(h_dst, 0, dst.height() - y_dst);
 
-    x_src = std::clamp(x_src, 0, dst.width());
-    y_src = std::clamp(y_src, 0, dst.height());
-    w_src = std::clamp(w_src, 0, dst.width());
-    h_src = std::clamp(h_src, 0, dst.height());
+    // Clamp source coordinates and size
+    w_src = std::clamp(w_src, 0, src.width() - x_src);
+    h_src = std::clamp(h_src, 0, src.height() - y_src);
 
     const float scale_x = static_cast<float>(w_src) / w_dst;
     const float scale_y = static_cast<float>(h_src) / h_dst;
 
+    // Iterate through the destination image pixels
     for (int y = 0; y < h_dst; y++) {
         const int src_y = y_src + static_cast<int>(y * scale_y);
         const int dst_y = y_dst + y;
@@ -656,9 +657,14 @@ void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
             const int src_x = x_src + static_cast<int>(x * scale_x);
             const int dst_x = x_dst + x;
 
-            Color col_src = src.get_unsafe(src_x, src_y);
-            Color col_dst = dst.get_unsafe(dst_x, dst_y);
-            dst.set_unsafe(dst_x, dst_y, blend(col_dst, col_src, mode));
+            // Ensure the source pixel coordinates are within bounds
+            if (src_x >= 0 && src_x < src.width() && src_y >= 0 && src_y < src.height() &&
+                dst_x >= 0 && dst_x < dst.width() && dst_y >= 0 && dst_y < dst.height()) {
+
+                Color col_src = src.get_unsafe(src_x, src_y);
+                Color col_dst = dst.get_unsafe(dst_x, dst_y);
+                dst.set_unsafe(dst_x, dst_y, blend(col_dst, col_src, mode));
+            }
         }
     }
 }
