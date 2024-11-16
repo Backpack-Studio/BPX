@@ -83,8 +83,8 @@ Load an image from a file, manipulate it, and save it back:
 
 int main() {
     bpx::Image image("input.jpg");
-    image = bpx::brightness(image, 1.2f); // Increase brightness
-    bpx::write_png(image, "output.png");  // Save as PNG
+    bpx::brightness(image, 1.2f);           // Increase brightness
+    bpx::write_png(image, "output.png");    // Save as PNG
     return 0;
 }
 ```
