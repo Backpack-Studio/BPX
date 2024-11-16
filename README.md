@@ -130,26 +130,26 @@ Uses existing pixel data without copying. If `owned` is true, memory is freed wh
 
 ### Pixel Manipulation
 
-#### `Color get(int x, int y) const`
+#### `Color Image::get(int x, int y) const`
 Retrieves the color of the pixel at coordinates `(x, y)`.
 
-#### `Image& set(int x, int y, Color color)`
+#### `Image& Image::set(int x, int y, Color color)`
 Sets the color of the pixel at `(x, y)`.
 
 ---
 
 ### Color Operations
 
-#### `Image& brightness(Image& image, float factor)`
+#### `void brightness(Image& image, float factor)`
 Adjusts brightness. A factor > 1 increases brightness, while a factor < 1 reduces it.
 
-#### `Image& contrast(Image& image, float factor)`
+#### `void contrast(Image& image, float factor)`
 Adjusts contrast, with `factor = 1` leaving contrast unchanged.
 
-#### `Image& saturation(Image& image, float factor)`
+#### `void saturation(Image& image, float factor)`
 Adjusts saturation. A factor > 1 increases saturation, and a factor < 1 reduces it.
 
-#### `Image& invert(Image& image)`
+#### `void invert(Image& image)`
 Inverts colors in the image, producing a negative effect.
 
 ---
