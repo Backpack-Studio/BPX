@@ -33,8 +33,8 @@ Image generate_gradient_linear_1d(int width, const ColorRamp& ramp, PixelFormat 
 }
 
 Image generate_gradient_linear(int width, int height, const ColorRamp& ramp,
-                                  int x_start, int y_start, int x_end, int y_end,
-                                  PixelFormat format) 
+                               int x_start, int y_start, int x_end, int y_end,
+                               PixelFormat format) 
 {
     Image image(width, height, BLANK, format);
 
@@ -56,8 +56,8 @@ Image generate_gradient_linear(int width, int height, const ColorRamp& ramp,
 }
 
 Image generate_gradient_radial(int width, int height, const ColorRamp& ramp,
-                                  int x_start, int y_start, int x_end, int y_end,
-                                  PixelFormat format) 
+                               int x_start, int y_start, int x_end, int y_end,
+                               PixelFormat format) 
 {
     Image image(width, height, BLANK, format);
 
