@@ -26,6 +26,10 @@
 
 namespace bpx {
 
+// Forward declarations
+
+class ColorRamp;
+
 /**
  * @brief Applies a mapping function to each pixel in the image.
  *
@@ -66,7 +70,7 @@ void map(Image& image, int x_start, int y_start, int width, int height, const Im
  * @param color The color to apply to every pixel in the image.
  * @return A reference to the modified image.
  */
-void fill(Image& image, const Color& color);
+void fill(Image& image, Color color);
 
 /**
  * @brief Draws a single point on the image at the specified coordinates.
@@ -153,30 +157,33 @@ void line(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, 
 void line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
 
 /**
- * @brief Draws a gradient line between two points on the image, transitioning between two colors.
+ * @brief Draws a gradient line between two points on the image, transitioning between colors from a color ramp.
  *
- * This function draws a line from `(x1, y1)` to `(x2, y2)`, with the color gradually transitioning
- * from `c1` at the starting point to `c2` at the ending point. The specified blend mode
- * controls how the gradient interacts with existing colors in the image.
+ * This function draws a line from `(x1, y1)` to `(x2, y2)`, with the color gradually transitioning 
+ * along the line according to the `ColorRamp` provided. The ramp defines multiple color points, and
+ * the color will interpolate between the corresponding points based on the position along the line. 
+ * The specified blend mode controls how the gradient interacts with existing colors in the image.
  *
  * @param image The image to modify.
  * @param x1 The x-coordinate of the starting point of the line.
  * @param y1 The y-coordinate of the starting point of the line.
  * @param x2 The x-coordinate of the ending point of the line.
  * @param y2 The y-coordinate of the ending point of the line.
- * @param c1 The starting color of the gradient.
- * @param c2 The ending color of the gradient.
+ * @param ramp The `ColorRamp` that defines the color transition along the line.
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void line_gradient(Image& image, int x1, int y1, int x2, int y2,
+                   const ColorRamp& ramp, BlendMode mode = BlendMode::REPLACE);
 
 /**
- * @brief Draws a thick gradient line between two points on the image, transitioning between two colors.
+ * @brief Draws a thick gradient line between two points on the image, transitioning between colors from a color ramp.
  *
- * This function draws a line from `(x1, y1)` to `(x2, y2)` with the specified thickness, where
- * the color transitions from `c1` at the starting point to `c2` at the ending point. The specified 
- * blend mode is used to control how the gradient interacts with existing colors in the image.
+ * This function draws a line from `(x1, y1)` to `(x2, y2)` with the specified thickness, where 
+ * the color gradually transitions along the line according to the `ColorRamp` provided. The ramp 
+ * defines multiple color points, and the color will interpolate between the corresponding points 
+ * based on the position along the line. The specified blend mode controls how the gradient interacts 
+ * with existing colors in the image.
  *
  * @param image The image to modify.
  * @param x1 The x-coordinate of the starting point of the line.
@@ -184,195 +191,171 @@ void line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color
  * @param x2 The x-coordinate of the ending point of the line.
  * @param y2 The y-coordinate of the ending point of the line.
  * @param thick The thickness of the line in pixels.
- * @param c1 The starting color of the gradient.
- * @param c2 The ending color of the gradient.
+ * @param ramp The `ColorRamp` that defines the color transition along the line.
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
+                   const ColorRamp& ramp, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a solid rectangle on the image with a specified color.
  *
- * This function fills a rectangular area defined by `(x1, y1)` as the top-left corner
- * and `(x2, y2)` as the bottom-right corner with a specified color. The color is applied 
- * using the given blend mode.
+ * This function fills a rectangular area defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h` with a specified color. The color is applied 
+ * using the given blending mode.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param color The color to fill the rectangle with.
  * @param mode The blending mode to use when applying the color. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle(Image& image, int x, int y, int w, int h, Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a rectangle on the image using a mapping function to define each pixel's color.
  *
- * This function fills a rectangular area defined by `(x1, y1)` as the top-left corner and `(x2, y2)`
- * as the bottom-right corner, applying a custom color mapping function to determine the color of each pixel.
- * This allows for complex color effects within the rectangle.
+ * This function fills a rectangular area defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`, applying a custom color mapping function to determine 
+ * the color of each pixel. This allows for complex color effects within the rectangle.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point.
  * @return A reference to the modified image.
  */
-void rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
+void rectangle(Image& image, int x, int y, int w, int h, const Image::Mapper& mapper);
 
 /**
- * @brief Draws a gradient-filled rectangle on the image with specified corner colors.
+ * @brief Draws a gradient-filled rectangle on the image with specified gradient from a color ramp.
  *
- * This function fills a rectangular area defined by `(x1, y1)` as the top-left corner and
- * `(x2, y2)` as the bottom-right corner, creating a gradient that interpolates between four 
- * specified corner colors. The top-left color is `col_tl`, the top-right is `col_tr`,
- * the bottom-right is `col_br`, and the bottom-left is `col_bl`.
+ * This function fills a rectangular area defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`, creating a linear gradient that interpolates between
+ * colors defined in the provided `ColorRamp`. The gradient is applied along the specified direction
+ * from `(x_start, y_start)` to `(x_end, y_end)` based on the positions within the color ramp.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
- * @param col_tl The color at the top-left corner.
- * @param col_tr The color at the top-right corner.
- * @param col_br The color at the bottom-right corner.
- * @param col_bl The color at the bottom-left corner.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
+ * @param x_start The x-coordinate of the starting point of the gradient.
+ * @param y_start The y-coordinate of the starting point of the gradient.
+ * @param x_end The x-coordinate of the ending point of the gradient.
+ * @param y_end The y-coordinate of the ending point of the gradient.
+ * @param ramp The `ColorRamp` that defines the color transitions along the gradient.
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
-                          Color col_tl, Color col_tr,
-                          Color col_br, Color col_bl,
-                          BlendMode mode = BlendMode::REPLACE);
+void rectangle_gradient_linear(Image& image, int x, int y, int w, int h,
+                               int x_start, int y_start, int x_end, int y_end,
+                               const ColorRamp& ramp, BlendMode mode = BlendMode::REPLACE);
+
+/**
+ * @brief Draws a gradient-filled rectangle on the image with a radial gradient from a color ramp.
+ *
+ * This function fills a rectangular area defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`, creating a radial gradient that interpolates between
+ * colors defined in the provided `ColorRamp`. The gradient is applied radially, with the center
+ * of the gradient starting at `(x_start, y_start)` and the outer edge at `(x_end, y_end)`.
+ *
+ * @param image The image to modify.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
+ * @param x_start The x-coordinate of the center of the radial gradient.
+ * @param y_start The y-coordinate of the center of the radial gradient.
+ * @param x_end The x-coordinate of the outer edge of the radial gradient.
+ * @param y_end The y-coordinate of the outer edge of the radial gradient.
+ * @param ramp The `ColorRamp` that defines the color transitions along the radial gradient.
+ * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
+ * @return A reference to the modified image.
+ */
+void rectangle_gradient_radial(Image& image, int x, int y, int w, int h,
+                               int x_start, int y_start, int x_end, int y_end,
+                               const ColorRamp& ramp, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws the outline of a rectangle on the image using a specified color.
  *
- * This function draws the border of a rectangle defined by `(x1, y1)` as the top-left corner and
- * `(x2, y2)` as the bottom-right corner. Only the outline is drawn, without filling the interior.
+ * This function draws the border of a rectangle defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`. Only the outline of the rectangle is drawn, without filling
+ * the interior.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param color The color to use for the rectangle outline.
  * @param mode The blending mode to use when applying the outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle_lines(Image& image, int x, int y, int w, int h,
+                     Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws the outline of a rectangle on the image, applying a mapping function to define the color of each point.
  *
- * This function draws the border of a rectangle defined by `(x1, y1)` as the top-left corner and
- * `(x2, y2)` as the bottom-right corner. A custom mapping function is used to determine the color 
+ * This function draws the border of a rectangle defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`. A custom mapping function is used to determine the color 
  * of each pixel along the outline, allowing for color variations or patterns along the rectangle's border.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point on the outline.
  * @return A reference to the modified image.
  */
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper);
+void rectangle_lines(Image& image, int x, int y, int w, int h, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a thick outline of a rectangle on the image with a specified color.
  *
- * This function draws a thick border around a rectangle defined by `(x1, y1)` as the top-left corner and 
- * `(x2, y2)` as the bottom-right corner. The outline is drawn with a specified thickness and color, 
+ * This function draws a thick border around a rectangle defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`. The outline is drawn with a specified thickness and color, 
  * and uses the given blend mode.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param thick The thickness of the outline in pixels.
  * @param color The color to use for the rectangle outline.
  * @param mode The blending mode to use when applying the outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
+void rectangle_lines(Image& image, int x, int y, int w, int h, int thick,
+                     Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick outline of a rectangle on the image using a mapping function to determine the color of each pixel.
  *
- * This function draws a thick border around a rectangle defined by `(x1, y1)` as the top-left corner 
- * and `(x2, y2)` as the bottom-right corner. The color of each pixel along the border is defined by 
- * a custom mapping function, allowing for color variations or patterns. The outline is drawn with 
- * a specified thickness.
+ * This function draws a thick border around a rectangle defined by the top-left corner at `(x, y)` 
+ * and the width `w` and height `h`. The color of each pixel along the border is determined by a custom
+ * mapping function, allowing for color variations or patterns. The outline is drawn with a specified thickness.
  *
  * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
+ * @param x The x-coordinate of the top-left corner of the rectangle.
+ * @param y The y-coordinate of the top-left corner of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
  * @param thick The thickness of the outline in pixels.
  * @param mapper A function that takes the x and y coordinates and returns the color to apply at that point on the outline.
  * @return A reference to the modified image.
  */
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper);
-
-/**
- * @brief Draws a gradient outline of a rectangle on the image with specified corner colors.
- *
- * This function draws a one-pixel thick border around a rectangle defined by `(x1, y1)` as the top-left corner
- * and `(x2, y2)` as the bottom-right corner. The color transitions smoothly along the rectangle's outline,
- * interpolating between the specified corner colors: `col_tl` for the top-left, `col_tr` for the top-right,
- * `col_br` for the bottom-right, and `col_bl` for the bottom-left corners.
- *
- * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
- * @param col_tl The color at the top-left corner of the rectangle.
- * @param col_tr The color at the top-right corner of the rectangle.
- * @param col_br The color at the bottom-right corner of the rectangle.
- * @param col_bl The color at the bottom-left corner of the rectangle.
- * @param mode The blending mode to use when applying the gradient outline. Defaults to `BlendMode::REPLACE`.
- * @return A reference to the modified image.
- */
-void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
-                                Color col_tl, Color col_tr,
-                                Color col_br, Color col_bl,
-                                BlendMode mode = BlendMode::REPLACE);
-
-/**
- * @brief Draws a thick gradient outline of a rectangle on the image with specified corner colors.
- *
- * This function draws a rectangular border with a specified thickness around the area defined by `(x1, y1)`
- * as the top-left corner and `(x2, y2)` as the bottom-right corner. The color along the outline is 
- * interpolated between four corner colors: `col_tl` (top-left), `col_tr` (top-right), 
- * `col_br` (bottom-right), and `col_bl` (bottom-left), creating a smooth gradient effect along 
- * the border.
- *
- * @param image The image to modify.
- * @param x1 The x-coordinate of the top-left corner of the rectangle.
- * @param y1 The y-coordinate of the top-left corner of the rectangle.
- * @param x2 The x-coordinate of the bottom-right corner of the rectangle.
- * @param y2 The y-coordinate of the bottom-right corner of the rectangle.
- * @param thick The thickness of the outline in pixels.
- * @param col_tl The color at the top-left corner of the rectangle.
- * @param col_tr The color at the top-right corner of the rectangle.
- * @param col_br The color at the bottom-right corner of the rectangle.
- * @param col_bl The color at the bottom-left corner of the rectangle.
- * @param mode The blending mode to use when applying the gradient outline. Defaults to `BlendMode::REPLACE`.
- * @return A reference to the modified image.
- */
-void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
-                                Color col_tl, Color col_tr, Color col_br, Color col_bl,
-                                BlendMode mode = BlendMode::REPLACE);
+void rectangle_lines(Image& image, int x, int y, int w, int h, int thick, const Image::Mapper& mapper);
 
 /**
  * @brief Draws a filled circle on the image using a specified color.
@@ -410,20 +393,21 @@ void circle(Image& image, int cx, int cy, int radius, const Image::Mapper& mappe
 /**
  * @brief Draws a circle with a gradient fill on the image, transitioning between two colors.
  *
- * This function draws a filled circle with a smooth color gradient from `c1` to `c2`. The circle is centered 
+ * This function draws a filled circle with a smooth color gradient, transitioning from the color
+ * defined in the `ColorRamp` at the center of the circle to the color at the edge. The circle is centered 
  * at `(cx, cy)` with the specified `radius`. The color of each pixel inside the circle is interpolated 
- * between `c1` and `c2` based on the distance from the center, creating a smooth gradient effect.
+ * based on the distance from the center, creating a smooth gradient effect.
  *
  * @param image The image to modify.
  * @param cx The x-coordinate of the center of the circle.
  * @param cy The y-coordinate of the center of the circle.
  * @param radius The radius of the circle in pixels.
- * @param c1 The color at the center of the circle.
- * @param c2 The color at the edge of the circle.
+ * @param ramp The `ColorRamp` that defines the color gradient from the center to the edge of the circle.
  * @param mode The blending mode to use when applying the gradient. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c2, BlendMode mode = BlendMode::REPLACE);
+void circle_gradient(Image& image, int cx, int cy, int radius,
+                     const ColorRamp& ramp, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a circle outline on the image with a specified color.
@@ -439,7 +423,8 @@ void circle_gradient(Image& image, int cx, int cy, int radius, Color c1, Color c
  * @param mode The blending mode to use when drawing the circle outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void circle_lines(Image& image, int cx, int cy, int radius, Color color, BlendMode mode = BlendMode::REPLACE);
+void circle_lines(Image& image, int cx, int cy, int radius, Color color,
+                  BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a circle outline on the image with a mapping function to determine the color of each pixel.
@@ -472,7 +457,8 @@ void circle_lines(Image& image, int cx, int cy, int radius, const Image::Mapper&
  * @param mode The blending mode to use when drawing the circle outline. Defaults to `BlendMode::REPLACE`.
  * @return A reference to the modified image.
  */
-void circle_lines(Image& image, int cx, int cy, int radius, int thick, Color color, BlendMode mode = BlendMode::REPLACE);
+void circle_lines(Image& image, int cx, int cy, int radius, int thick,
+                  Color color, BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Draws a thick circle outline on the image using a mapping function for color.
@@ -513,8 +499,8 @@ void circle_lines(Image& image, int cx, int cy, int radius, int thick, const Ima
  * @return A reference to the modified destination image.
  */
 void draw(Image& dst, int x_dst, int y_dst, int w_dst, int h_dst,
-            Image& src, int x_src, int y_src, int w_src, int h_src,
-            BlendMode mode = BlendMode::REPLACE);
+          Image& src, int x_src, int y_src, int w_src, int h_src,
+          BlendMode mode = BlendMode::REPLACE);
 
 /**
  * @brief Adjusts the saturation of the image.

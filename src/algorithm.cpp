@@ -18,6 +18,7 @@
  */
 
 #include "BPX/algorithm.hpp"
+#include "BPX/ramp.hpp"
 
 #include <algorithm>
 #include <stdexcept>
@@ -289,15 +290,6 @@
         }                                                                                   \
     }
 
-#define PF_RECT_TRAVEL(PIXEL_CODE)                                                          \
-    for (int y = ymin; y <= ymax; ++y) {                                                    \
-        size_t y_offset = y * image.width();                                                \
-        for (int x = xmin; x <= xmax; ++x) {                                                \
-            size_t offset = y_offset + x;                                                   \
-            PIXEL_CODE                                                                      \
-        }                                                                                   \
-    }
-
 
 /* Internal */
 
@@ -409,7 +401,7 @@ void map(Image& image, int x_start, int y_start, int width, int height, const Im
     }
 }
 
-void fill(Image& image, const Color& color)
+void fill(Image& image, Color color)
 {
     const size_t size = image.size();
     for (size_t i = 0; i < size; i++) {
@@ -450,127 +442,139 @@ void line(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::
     });
 }
 
-void line_gradient(Image& image, int x1, int y1, int x2, int y2, Color c1, Color c2, BlendMode mode)
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, const ColorRamp& ramp, BlendMode mode)
 {
     PF_LINE_TRAVEL({
-        image.set_unsafe(offset, blend(image.get_unsafe(offset), lerp(c1, c2, static_cast<float>(i) / end), mode));
+        image.set_unsafe(offset, blend(image.get_unsafe(offset), ramp.get(static_cast<float>(i) / end), mode));
     });
 }
 
-void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, Color c1, Color c2, BlendMode mode)
+void line_gradient(Image& image, int x1, int y1, int x2, int y2, int thick, const ColorRamp& ramp, BlendMode mode)
 {
     PF_LINE_THICK_TRAVEL({
-        line_gradient(image, x1, y1, x2, y2, c1, c2, mode);
+        line_gradient(image, x1, y1, x2, y2, ramp, mode);
     });
 }
 
-void rectangle(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
+void rectangle(Image& image, int x, int y, int w, int h, Color color, BlendMode mode)
 {
-    if (x1 > x2) std::swap(x1, x2);
-    if (y1 > y2) std::swap(y1, y2);
+    int xmin = std::clamp(x, 0, image.width() - 1);
+    int ymin = std::clamp(y, 0, image.height() - 1);
+    int xmax = std::clamp(x + w, 0, image.width() - 1);
+    int ymax = std::clamp(y + h, 0, image.height() - 1);
 
-    int xmin = std::clamp(x1, 0, image.width() - 1);
-    int ymin = std::clamp(y1, 0, image.height() - 1);
-    int xmax = std::clamp(x2, 0, image.width() - 1);
-    int ymax = std::clamp(y2, 0, image.height() - 1);
+    if (xmin > xmax) std::swap(xmin, xmax);
+    if (ymin > ymax) std::swap(ymin, ymax);
 
-    PF_RECT_TRAVEL({
-        image.set_unsafe(offset, blend(image.get_unsafe(offset), color, mode));
-    });
+    for (y = ymin; y < ymax; y++) {
+        for (x = xmin; x < xmax; x++) {
+            image.set_unsafe(x, y, blend(image.get_unsafe(x, y), color, mode));
+        }
+    }
 }
 
-void rectangle(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
+void rectangle(Image& image, int x, int y, int w, int h, const Image::Mapper& mapper)
 {
-    if (x1 > x2) std::swap(x1, x2);
-    if (y1 > y2) std::swap(y1, y2);
+    int xmin = std::clamp(x, 0, image.width() - 1);
+    int ymin = std::clamp(y, 0, image.height() - 1);
+    int xmax = std::clamp(x + w, 0, image.width() - 1);
+    int ymax = std::clamp(y + h, 0, image.height() - 1);
 
-    int xmin = std::clamp(x1, 0, image.width() - 1);
-    int ymin = std::clamp(y1, 0, image.height() - 1);
-    int xmax = std::clamp(x2, 0, image.width() - 1);
-    int ymax = std::clamp(y2, 0, image.height() - 1);
+    if (xmin > xmax) std::swap(xmin, xmax);
+    if (ymin > ymax) std::swap(ymin, ymax);
 
-    PF_RECT_TRAVEL({
-        image.set_unsafe(offset, mapper(x, y, image.get_unsafe(offset)));
-    });
+    for (y = ymin; y < ymax; y++) {
+        for (x = xmin; x < xmax; x++) {
+            image.set_unsafe(x, y, mapper(x, y, image.get_unsafe(x, y)));
+        }
+    }
 }
 
-void rectangle_gradient(Image& image, int x1, int y1, int x2, int y2,
-                          Color col_tl, Color col_tr,
-                          Color col_br, Color col_bl,
-                          BlendMode mode)
+void rectangle_gradient_linear(Image& image, int x, int y, int w, int h,
+                               int x_start, int y_start, int x_end, int y_end,
+                               const ColorRamp& ramp, BlendMode mode)
 {
-    if (x1 > x2) std::swap(x1, x2);
-    if (y1 > y2) std::swap(y1, y2);
+    int xmin = std::clamp(x, 0, image.width() - 1);
+    int ymin = std::clamp(y, 0, image.height() - 1);
+    int xmax = std::clamp(x + w, 0, image.width() - 1);
+    int ymax = std::clamp(y + h, 0, image.height() - 1);
 
-    int w = abs(x2 - x1);
-    int h = abs(y2 - y1);
+    if (xmin > xmax) std::swap(xmin, xmax);
+    if (ymin > ymax) std::swap(ymin, ymax);
 
-    int xmin = std::clamp(x1, 0, image.width() - 1);
-    int ymin = std::clamp(y1, 0, image.height() - 1);
-    int xmax = std::clamp(x2, 0, image.width() - 1);
-    int ymax = std::clamp(y2, 0, image.height() - 1);
+    float dx = x_end - x_start;
+    float dy = y_end - y_start;
+    float max_distance = std::sqrt(dx * dx + dy * dy);
 
-    PF_RECT_TRAVEL({
-        int ix = x - x1;
-        int iy = y - y1;
-        Color col_top = lerp(col_tl, col_tr, static_cast<float>(ix) / w);
-        Color col_bottom = lerp(col_bl, col_br, static_cast<float>(ix) / w);
-        Color col_final = lerp(col_top, col_bottom, static_cast<float>(iy) / h);
-        image.set_unsafe(offset, blend(image.get_unsafe(offset), col_final, mode));
-    });
+    for (y = ymin; y < ymax; y++) {
+        for (x = xmin; x < xmax; x++) {
+            float current_dx = x - x_start;
+            float current_dy = y - y_start;
+            float distance = (current_dx * dx + current_dy * dy) / max_distance;
+            float t = std::clamp(distance / max_distance, 0.0f, 1.0f);
+            image.set_unsafe(x, y, ramp.get(t));
+        }
+    }
 }
 
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, Color color, BlendMode mode)
+void rectangle_gradient_radial(Image& image, int x, int y, int w, int h,
+                               int x_start, int y_start, int x_end, int y_end,
+                               const ColorRamp& ramp, BlendMode mode)
 {
-    line(image, x1, y1, x2, y1, color, mode);
-    line(image, x2, y1, x2, y2, color, mode);
-    line(image, x2, y2, x1, y2, color, mode);
-    line(image, x1, y2, x1, y1, color, mode);
+    int xmin = std::clamp(x, 0, image.width() - 1);
+    int ymin = std::clamp(y, 0, image.height() - 1);
+    int xmax = std::clamp(x + w, 0, image.width() - 1);
+    int ymax = std::clamp(y + h, 0, image.height() - 1);
+
+    if (xmin > xmax) std::swap(xmin, xmax);
+    if (ymin > ymax) std::swap(ymin, ymax);
+
+    float max_distance = std::sqrt(
+        (x_end - x_start) * (x_end - x_start) + 
+        (y_end - y_start) * (y_end - y_start)
+    );
+
+    for (y = ymin; y < ymax; y++) {
+        for (x = xmin; x < xmax; x++) {
+            float dx = x - x_start;
+            float dy = y - y_start;
+            float distance = std::sqrt(dx * dx + dy * dy);
+            float t = std::clamp(distance / max_distance, 0.0f, 1.0f);
+            image.set_unsafe(x, y, ramp.get(t));
+        }
+    }
 }
 
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, const Image::Mapper& mapper)
+void rectangle_lines(Image& image, int x, int y, int w, int h, Color color, BlendMode mode)
 {
-    line(image, x1, y1, x2, y1, mapper);
-    line(image, x2, y1, x2, y2, mapper);
-    line(image, x2, y2, x1, y2, mapper);
-    line(image, x1, y2, x1, y1, mapper);
+    line(image, x, y, x + w, y, color, mode);
+    line(image, x + w, y, x + w, y + h, color, mode);
+    line(image, x + w, y + h, x, y + h, color, mode);
+    line(image, x, y + h, x, y, color, mode);
 }
 
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, Color color, BlendMode mode)
+void rectangle_lines(Image& image, int x, int y, int w, int h, const Image::Mapper& mapper)
 {
-    line(image, x1, y1, x2, y1, thick, color, mode);
-    line(image, x2, y1, x2, y2, thick, color, mode);
-    line(image, x2, y2, x1, y2, thick, color, mode);
-    line(image, x1, y2, x1, y1, thick, color, mode);
+    line(image, x, y, x + w, y, mapper);
+    line(image, x + w, y, x + w, y + h, mapper);
+    line(image, x + w, y + h, x, y + h, mapper);
+    line(image, x, y + h, x, y, mapper);
 }
 
-void rectangle_lines(Image& image, int x1, int y1, int x2, int y2, int thick, const Image::Mapper& mapper)
+void rectangle_lines(Image& image, int x, int y, int w, int h, int thick, Color color, BlendMode mode)
 {
-    line(image, x1, y1, x2, y1, thick, mapper);
-    line(image, x2, y1, x2, y2, thick, mapper);
-    line(image, x2, y2, x1, y2, thick, mapper);
-    line(image, x1, y2, x1, y1, thick, mapper);
+    line(image, x, y, x + w, y, thick, color, mode);
+    line(image, x + w, y, x + w, y + h, thick, color, mode);
+    line(image, x + w, y + h, x, y + h, thick, color, mode);
+    line(image, x, y + h, x, y, thick, color, mode);
 }
 
-void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2,
-                                Color col_tl, Color col_tr,
-                                Color col_br, Color col_bl,
-                                BlendMode mode)
+void rectangle_lines(Image& image, int x, int y, int w, int h, int thick, const Image::Mapper& mapper)
 {
-    line_gradient(image, x1, y1, x2, y1, col_tl, col_tr, mode);
-    line_gradient(image, x2, y1, x2, y2, col_tr, col_br, mode);
-    line_gradient(image, x2, y2, x1, y2, col_br, col_bl, mode);
-    line_gradient(image, x1, y2, x1, y1, col_bl, col_tl, mode);
-}
-
-void rectangle_lines_gradient(Image& image, int x1, int y1, int x2, int y2, int thick,
-                         Color col_tl, Color col_tr, Color col_br, Color col_bl,
-                         BlendMode mode)
-{
-    line_gradient(image, x1, y1, x2, y1, thick, col_tl, col_tr, mode);
-    line_gradient(image, x2, y1, x2, y2, thick, col_tr, col_br, mode);
-    line_gradient(image, x2, y2, x1, y2, thick, col_br, col_bl, mode);
-    line_gradient(image, x1, y2, x1, y1, thick, col_bl, col_tl, mode);
+    line(image, x, y, x + w, y, thick, mapper);
+    line(image, x + w, y, x + w, y + h, thick, mapper);
+    line(image, x + w, y + h, x, y + h, thick, mapper);
+    line(image, x, y + h, x, y, thick, mapper);
 }
 
 void circle(Image& image, int cx, int cy, int radius, Color color, BlendMode mode)
