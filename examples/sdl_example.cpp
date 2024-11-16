@@ -35,21 +35,28 @@ int main()
     };
 
     // Generate xor pattern
-    bpx::Image im_xor = bpx::Image(128, 128, bpx::BLUE);
+    bpx::Image im_xor = bpx::Image(1024, 1024, bpx::BLUE);
     bpx::map(im_xor, [&bpx_surface](int x, int y, bpx::Color color){
         return blend(color, x ^ y, bpx::BlendMode::ADD);
     });
 
     // Generate grid pattern
-    bpx::Image im_grid = bpx::generate_grid(128, 128, 16);
+    bpx::Image im_grid = bpx::generate_grid(1024, 1024, 16);
 
     // Generate linear gradient
     bpx::ColorRamp ramp1(bpx::WHITE, bpx::BLACK);
-    bpx::Image im_linear = bpx::generate_gradient_linear(128, 128, ramp1, 64, 0, 64, 128);
+    bpx::Image im_linear = bpx::generate_gradient_linear(1024, 1024, ramp1, 512, 0, 512, 1024);
 
     // Generate radial gradient
-    bpx::ColorRamp ramp2({ { bpx::WHITE, 0.0f }, { bpx::RED, 0.5f }, { bpx::BLUE, 1.0f } });
-    bpx::Image im_radial = bpx::generate_gradient_radial(128, 128, ramp2, 64, 64, 128, 64);
+    bpx::ColorRamp ramp2({
+        { bpx::WHITE, 0.0f },
+        { bpx::RED, 0.2f },
+        { bpx::GREEN, 0.4f },
+        { bpx::BLUE, 0.6f },
+        { bpx::RED, 0.8f },
+        { bpx::BLACK, 1.0f }
+    });
+    bpx::Image im_radial = bpx::generate_gradient_radial(1024, 1024, ramp2, 512, 512, 1024, 512);
 
     // Main program
 
@@ -66,25 +73,10 @@ int main()
 
         bpx::fill(bpx_surface, bpx::BLACK);
 
-        bpx::draw(
-            bpx_surface, 0, 0, 400, 300,
-            im_xor, 0, 0, 128, 128
-        );
-
-        bpx::draw(
-            bpx_surface, 400, 0, 400, 300,
-            im_grid, 0, 0, 128, 128
-        );
-
-        bpx::draw(
-            bpx_surface, 0, 300, 400, 300,
-            im_linear, 0, 0, 128, 128
-        );
-
-        bpx::draw(
-            bpx_surface, 400, 300, 400, 300,
-            im_radial, 0, 0, 128, 128
-        );
+        bpx::draw(bpx_surface, 0, 0, 400, 300, im_xor);
+        bpx::draw(bpx_surface, 400, 0, 400, 300, im_grid);
+        bpx::draw(bpx_surface, 0, 300, 400, 300, im_linear);
+        bpx::draw(bpx_surface, 400, 300, 400, 300, im_radial);
 
         SDL_UpdateWindowSurface(win);
     }
