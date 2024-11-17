@@ -142,7 +142,7 @@ public:
      * This function allows access to a pixel color at a specific offset in memory without
      * bounds checking. It is the caller's responsibility to ensure the offset is valid.
      *
-     * @param offset The offset in bytes to the pixel data.
+     * @param offset The offset in number of pixels up to the desired pixel.
      * @return The color of the pixel at the specified offset.
      */
     Color get_unsafe(size_t offset) const;
@@ -167,7 +167,7 @@ public:
      * This function allows setting the color of a pixel at a specific offset in memory
      * without bounds checking. It is the caller's responsibility to ensure the offset is valid.
      *
-     * @param offset The offset in bytes to the pixel data.
+     * @param offset The offset in number of pixels up to the desired pixel.
      * @param color The color to set the pixel to.
      * @return A reference to the current `Image` object.
      */
@@ -194,7 +194,7 @@ public:
      * This function retrieves the color of a pixel at the specified offset in memory.
      * It ensures that the offset is within valid bounds.
      *
-     * @param offset The offset in bytes to the pixel data.
+     * @param offset The offset in number of pixels up to the desired pixel.
      * @return The color of the pixel at the specified offset.
      */
     Color get(size_t offset) const {
@@ -227,7 +227,7 @@ public:
      * This function sets the color of a pixel at the specified offset in memory.
      * It ensures that the offset is within valid bounds.
      *
-     * @param offset The offset in bytes to the pixel data.
+     * @param offset The offset in number of pixels up to the desired pixel.
      * @param color The color to set the pixel to.
      * @return A reference to the current `Image` object.
      */
