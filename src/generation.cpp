@@ -79,17 +79,15 @@ Image generate_gradient_radial(int width, int height, const ColorRamp& ramp,
     return image;
 }
 
-Image generate_checkerboard(int width, int height, int square_size,
+Image generate_checkerboard(int width, int height, int square_w, int square_h,
                             const Color& color1, const Color& color2,
                             PixelFormat format)
 {
     Image image(width, height, color1);
 
-    for (int y = 0; y < height; y += square_size) {
-        for (int x = 0; x < width; x += square_size) {
-            if (((x / square_size) + (y / square_size)) % 2 == 0) {
-                rectangle(image, x, y, x + square_size, y + square_size, color2);
-            }
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++)  {
+            image.set(x, y, ((x / square_w + y / square_h) % 2 == 0) ? color1 : color2);
         }
     }
 

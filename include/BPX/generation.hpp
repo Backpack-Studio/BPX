@@ -90,13 +90,14 @@ Image generate_gradient_radial(int width, int height, const ColorRamp& ramp,
  *
  * @param width The width of the image in pixels.
  * @param height The height of the image in pixels.
- * @param square_size The size of each square in the checkerboard pattern.
+ * @param square_w The width of each square in the checkerboard pattern.
+ * @param square_h The height of each square in the checkerboard pattern.
  * @param color1 The color of the first set of squares (default is black).
  * @param color2 The color of the second set of squares (default is white).
  * @param format The pixel format for the image (default is RGBA_U8).
  * @return The generated image with the checkerboard pattern.
  */
-Image generate_checkerboard(int width, int height, int square_size,
+Image generate_checkerboard(int width, int height, int square_w, int square_h,
                             const Color& color1 = BLACK, const Color& color2 = WHITE,
                             PixelFormat format = PixelFormat::RGBA_U8);
 
